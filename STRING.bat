@@ -36,8 +36,8 @@ echo.%number% Settings
 echo.
 echo.
 
-if Defined selectedi echo.Selected interface=%selectedi%
-choice /c 123456789C
+if Defined selectedi echo.Selected interface=%selectedi% D=Dhcp S=static
+choice /c 123456789CDS
 set /a choic=%errorlevel%
 if %choic% LEQ %total% goto selectedi
 set /a selected=total+1
@@ -55,6 +55,8 @@ if %choic%==%selected% goto settings
 set /a selected=total+7
 if %choic%==%selected% goto edit
 if %choic%==10 goto setinterface
+if %choic%==11 goto dhcp
+if %choic%==12 goto static
 goto begin
 :selectedi
 set /a real_thing=choic-1
@@ -181,4 +183,64 @@ if "%string%"=="Yes"  echo.    IP settings: DHCP
 if defined ipis echo %ipis%
 if defined gateis echo %gateis%
 if defined subnetis echo %subnetis%
+goto begin
+:dhcp
+if not defined selectedi echo.Please select an Interface&PAUSE&goto begin
+echo @echo off^&title Running Command..^& cls ^& echo.netsh interface ipv4 set address name=%selectedi% source=dhcp  > temps23210948.bat
+echo.netsh -c interface ipv4 set address name=%selectedi% source=dhcp  >> temps23210948.bat
+echo.echo Errorlevel=%%errorlevel%%  >> temps23210948.bat
+echo.PAUSE >> temps23210948.bat
+if exist temps23210948.bat for /f "tokens=*" %%i in ('dir /s /b .\temps23210948.bat') do set file_nameis=%%i
+
+echo Set objShell = CreateObject("Shell.Application") >xxxxxxxxxx0931092.vbs
+echo Set FSO = CreateObject("Scripting.FileSystemObject") >>xxxxxxxxxx0931092.vbs 
+echo objShell.ShellExecute "cmd", "/c " ^& Chr(34) ^& "%file_nameis%" ^& Chr(34) , "", "runas" >>xxxxxxxxxx0931092.vbs
+wscript "xxxxxxxxxx0931092.vbs" 
+timeout 2 
+del xxxxxxxxxx0931092.vbs
+del temps23210948.bat
+goto begin
+:static
+:no_good
+if defined ipis for /f "tokens=3" %%i in ("%ipis%") do echo|set/p=%%i|clip
+if defined ipis echo.IP Copied! You can use Paste
+set /p ip=Enter IP ****
+echo %ip%| findstr /r "^[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*$"&&echo.Got it! || echo.no_good&&goto no_good
+:no_t
+if defined gateis for /f "tokens=3" %%i in ("%gateis%") do echo|set/p=%%i|clip
+if defined gateis echo.Gateway Copied! You can use Paste
+set /p gate=Enter gate IP address **
+echo %gate%| findstr /r "^[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*$"&&echo.Got it! || echo.no_good&&goto no_t
+:not_really
+if defined subnetis for /f "tokens=5 delims=() " %%i in ("%subnetis%") do echo|set/p=%%i|clip
+if defined subnetis echo.Subnet Copied! You can use Paste
+set /p subnet=Enter subnet ***
+echo %subnet%| findstr /r "^[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*$"&&echo.Got it! || echo.no_good&&goto not_really
+:doit
+echo.Done!
+echo.Setting in motion..&timeout 1 >NUL&echo|set /p=Running as Administrative priveleges...
+
+echo mode 80,7 ^&color %colors%^&echo off^&title Running Command..^& cls ^& echo.netsh interface ipv4 set address name=%selectedi% static %ip% %subnet% %gate% > temps23210948.bat
+echo.netsh -c interface ipv4 set address name=%selectedi% static %ip% %subnet% %gate%  >> temps23210948.bat
+echo.echo Errorlevel=%errorlevel% >> temps23210948.bat
+echo.PAUSE >> temps23210948.bat
+
+if exist temps23210948.bat for /f "tokens=*" %%i in ('dir /s /b .\temps23210948.bat') do set file_nameis=%%i
+
+echo Set objShell = CreateObject("Shell.Application") >xxxxxxxxxx0931092.vbs
+echo Set FSO = CreateObject("Scripting.FileSystemObject") >>xxxxxxxxxx0931092.vbs 
+echo objShell.ShellExecute "cmd", "/c " ^& Chr(34) ^& "%file_nameis%" ^& Chr(34) , "", "runas" >>xxxxxxxxxx0931092.vbs 
+
+
+
+wscript "xxxxxxxxxx0931092.vbs"
+
+
+
+
+
+timeout 2
+
+del xxxxxxxxxx0931092.vbs
+del temps23210948.bat
 goto begin
