@@ -38,7 +38,7 @@ echo.%number% Edit
 echo.
 echo.
 
-if Defined selectedi echo.Selected interface=%selectedi% D=Dhcp S=static
+if Defined selectedi echo.Selected interface=%selectedi% D=Dhcp
 choice /c 123456789CDS
 set /a choic=%errorlevel%
 if %choic% LEQ %total% goto selectedi
