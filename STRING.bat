@@ -1,4 +1,8 @@
 @echo off
+__IP To:olS KiT:: by AnonymousKitLord.
+color 5f
+ping -n 1 localhost 2>NUL 1>NUL
+color 7
 set selectedi=
 :begin
 set /a counter=-1
