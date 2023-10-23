@@ -33,6 +33,8 @@ set /a number+=1
 echo.%number% Disable
 set /a number+=1
 echo.%number% Settings
+set /a number+=1
+echo.%number% Edit
 echo.
 echo.
 
@@ -53,10 +55,10 @@ if %choic%==%selected% goto disable
 set /a selected=total+6
 if %choic%==%selected% goto settings
 set /a selected=total+7
-if %choic%==%selected% goto edit
+if %choic%==%selected% goto static
 if %choic%==10 goto setinterface
 if %choic%==11 goto dhcp
-if %choic%==12 goto static
+
 goto begin
 :selectedi
 set /a real_thing=choic-1
