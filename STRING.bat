@@ -1,10 +1,13 @@
 @echo off
-__IP To:olS KiT:: by AnonymousKitLord.
-color 5f
+title __IP To:olS KiT:: by AnonymousKitLord.
+color e0
 ping -n 1 localhost 2>NUL 1>NUL
 color 7
 set selectedi=
 :begin
+echo.
+if defined selectedi echo|set/p=Selected interface^=%selectedi% &echo.
+echo.
 set /a counter=-1
 for /f "skip=3 delims=" %%a in ('netsh interface show interface') do for /f "tokens=1,2,3*" %%b in ("%%a") do if %%e NEQ "" echo "%%e"|findstr /r "[%%]" >NUL&&(echo.&echo..-Bat---Attention--required-!-!---------------------&echo.^|Found offensive character '%%' Interface name      ^|&echo.^|Unable to proceed with this interface due to this.^|&echo.^|offending character, therefore                    ^|&echo.^|please change it's name!                          ^|&echo.----------------------------------------------------&echo.Error Details: Interface Name: [%%e]&echo.&echo.Press Any Key to Open Network Adapter connection...&PAUSE >NUL&ncpa.cpl ) || call :set "%%e"
 goto FIRSTstart
@@ -41,9 +44,9 @@ set /a number+=1
 echo.%number% Edit
 echo.
 echo.
-
-if Defined selectedi echo.Selected interface=%selectedi% D=Dhcp
-choice /c 123456789CDS
+echo.Tip- Goto Setting for pre-populate I.p. Addresses
+if Defined selectedi echo|set/p=^^^>^^^>^^^> C^=Change ^^^| D^=Dhcp  :            
+choice /c 123456789CD /n
 set /a choic=%errorlevel%
 if %choic% LEQ %total% goto selectedi
 set /a selected=total+1
@@ -129,7 +132,7 @@ goto begin
 set /a totalminusone=total-1
 for /l %%d in (0,1,%totalminusone%) do CALL echo %%d. %%interface[%%d]%%
 if defined CustomTemplate echo.%total%. "%CustomTemplate%"
-choice /c 0123456789
+choice /c 0123456789 /n
 set /a thechooiseintheend=%errorlevel%-1
 if defined CustomTemplate if %thechooiseintheend%==%total% set selectedi="%CustomTemplate%"
 for /l %%d in (0,1,%totalminusone%) do if %%d==%thechooiseintheend% CALL set selectedi=%%interface[%%d]%%
@@ -207,6 +210,8 @@ del xxxxxxxxxx0931092.vbs
 del temps23210948.bat
 goto begin
 :static
+if defined selectedi echo.Interface: %selectedi%
+if not defined selectedi echo.No interface is selected!&goto begin
 :no_good
 if defined ipis for /f "tokens=3" %%i in ("%ipis%") do echo|set/p=%%i|clip
 if defined ipis echo.IP Copied! You can use Paste
