@@ -5,11 +5,11 @@ ping -n 1 localhost 2>NUL 1>NUL
 color 7
 set selectedi=
 :begin
-echo.
-if defined selectedi echo|set/p=Selected interface^=%selectedi% &echo.
-echo.
+echo:
+if defined selectedi echo|set/p=Selected interface^=%selectedi% &echo:
+echo:
 set /a counter=-1
-for /f "skip=3 delims=" %%a in ('netsh interface show interface') do for /f "tokens=1,2,3*" %%b in ("%%a") do if %%e NEQ "" echo "%%e"|findstr /r "[%%]" >NUL&&(echo.&echo..-Bat---Attention--required-!-!---------------------&echo.^|Found offensive character '%%' Interface name      ^|&echo.^|Unable to proceed with this interface due to this.^|&echo.^|offending character, therefore                    ^|&echo.^|please change it's name!                          ^|&echo.----------------------------------------------------&echo.Error Details: Interface Name: [%%e]&echo.&echo.Press Any Key to Open Network Adapter connection...&PAUSE >NUL&ncpa.cpl ) || call :set "%%e"
+for /f "skip=3 delims=" %%a in ('netsh interface show interface') do for /f "tokens=1,2,3*" %%b in ("%%a") do if %%e NEQ "" echo "%%e"|findstr /r "[%%]" >NUL&&(echo:&echo:.-Bat---Attention--required-!-!---------------------&echo:^|Found offensive character '%%' Interface name      ^|&echo:^|Unable to proceed with this interface due to this.^|&echo:^|offending character, therefore                    ^|&echo:^|please change it's name!                          ^|&echo:----------------------------------------------------&echo:Error Details: Interface Name: [%%e]&echo:&echo:Press Any Key to Open Network Adapter connection...&PAUSE >NUL&ncpa.cpl ) || call :set "%%e"
 goto FIRSTstart
 :set
 set temporary=%1
@@ -29,22 +29,22 @@ set /a total=number
 :START
 set /a number=total
 set /a number+=1
-if Defined CustomTemplate (echo.%number% Custom Interface Name "%CustomTemplate%") else (echo.%number% Custom Interface Name )
+if Defined CustomTemplate (echo:%number% Custom Interface Name "%CustomTemplate%") else (echo:%number% Custom Interface Name )
 set /a number+=1
-echo.%number% Custom Command
+echo:%number% Custom Command
 set /a number+=1
-echo.%number% Ping Lists
+echo:%number% Ping Lists
 set /a number+=1
-echo.%number% Enable
+echo:%number% Enable
 set /a number+=1
-echo.%number% Disable
+echo:%number% Disable
 set /a number+=1
-echo.%number% Settings
+echo:%number% Settings
 set /a number+=1
-echo.%number% Edit
-echo.
-echo.
-echo.Tip- Goto Setting for pre-populate I.p. Addresses
+echo:%number% Edit
+echo:
+echo:
+echo:Tip- Goto Setting for pre-populate I.p. Addresses
 if Defined selectedi echo|set/p=^^^>^^^>^^^> C^=Change ^^^| D^=Dhcp  :            
 choice /c 123456789CD /n
 set /a choic=%errorlevel%
@@ -87,7 +87,7 @@ set /a invalid=0
 set /a valid=0
 if defined selectedfile goto fileopen
 Cls
-echo.Press a key to select ping list file....
+echo:Press a key to select ping list file....
 Pause >NUL
 for /f "delims=" %%i in ('powershell -c "Add-Type -AssemblyName System.Windows.Forms;$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ InitialDirectory = [Environment]::GetFolderPath('Desktop') };$null = $FileBrowser.ShowDialog();$FileBrowser.Filename"') do set selectedfile=%%i
 if not defined selectedfile goto begin
@@ -95,19 +95,19 @@ if not defined selectedfile goto begin
 echo "%selectedfile%"
 if defined selectedfile for /f "delims=" %%i in ('type "%selectedfile%"') do echo %%i|findstr /r "^[0-9]*[.][0-9]*[.][0-9]*[.][0-9]*$"&&(set /a valid=1 ) || (set /a invalid+=1)
 
-if %valid%==1 if %invalid%==0 echo.Sane File Found!
-if %valid%==1 if %invalid% GTR 0 echo.File may contain invalid data.
-if %valid%==0                 echo.File contains invalid data.
-echo. & echo.Continue?
+if %valid%==1 if %invalid%==0 echo:Sane File Found!
+if %valid%==1 if %invalid% GTR 0 echo:File may contain invalid data.
+if %valid%==0                 echo:File contains invalid data.
+echo: & echo:Continue?
 set /a wait=200
 choice /m "Continue?"
 if %errorlevel%==2 goto begin
-for /f "delims=" %%i in ('type "%selectedfile%"') do echo.%%i&start cmd /c "PING -n 1 -w %wait% %%i&&(mode 35,5&color 0A&ECHO OFF&CLS&ECHO %%i&title whatabout:scan09328912:%%i&PAUSE >NUL)"
-echo.Press any key
+for /f "delims=" %%i in ('type "%selectedfile%"') do echo:%%i&start cmd /c "PING -n 1 -w %wait% %%i&&(mode 35,5&color 0A&ECHO OFF&CLS&ECHO %%i&title whatabout:scan09328912:%%i&PAUSE >NUL)"
+echo:Press any key
 PAUSE >nul
-echo.&echo.Press any key to scan results...
+echo:&echo:Press any key to scan results...
 PAUSE >NUL
-echo.Beginning scan....
+echo:Beginning scan....
 setlocal enabledelayedexpansion
 REM LEM
 set stopper=^
@@ -119,31 +119,31 @@ set stl=
 for /f "delims=" %%i in ('tasklist /v /fi "windowtitle eq whatabout:scan09328912:*" /fo list ^| findstr  "whatabout:scan09328912:"') do for /f "tokens=4 delims=:" %%a in ("%%i") do set stl=!stl!%%a is UP!stopper!
 
 
-if "!stl!"=="" (echo.No results. &echo.) else (echo !stl!)
+if "!stl!"=="" (echo:No results. &echo:) else (echo !stl!)
 
 pause >NUL
 
 taskkill /fi "windowtitle eq whatabout:scan09328912:*" 1>NUL 2>NUL
-echo.[Closed Window]
+echo:[Closed Window]
 Endlocal disabledelayedexpansion
 PAUSE >NUL
 goto begin
 :setinterface
 set /a totalminusone=total-1
 for /l %%d in (0,1,%totalminusone%) do CALL echo %%d. %%interface[%%d]%%
-if defined CustomTemplate echo.%total%. "%CustomTemplate%"
+if defined CustomTemplate echo:%total%. "%CustomTemplate%"
 choice /c 0123456789 /n
 set /a thechooiseintheend=%errorlevel%-1
 if defined CustomTemplate if %thechooiseintheend%==%total% set selectedi="%CustomTemplate%"
 for /l %%d in (0,1,%totalminusone%) do if %%d==%thechooiseintheend% CALL set selectedi=%%interface[%%d]%%
 goto begin
 :enable
-if not defined selectedi echo.Please select an Interface&PAUSE&goto begin
-echo.running command...
-echo.netsh interface set interface %selectedi% enable
-echo.netsh interface set interface %selectedi% enable  >> temps23210948.bat
-echo.echo Errorlevel=%%errorlevel%% >> temps23210948.bat
-echo.PAUSE >> temps23210948.bat
+if not defined selectedi echo:Please select an Interface&PAUSE&goto begin
+echo:running command...
+echo:netsh interface set interface %selectedi% enable
+echo:netsh interface set interface %selectedi% enable  >> temps23210948.bat
+echo:echo Errorlevel=%%errorlevel%% >> temps23210948.bat
+echo:PAUSE >> temps23210948.bat
 
 if exist temps23210948.bat for /f "tokens=*" %%i in ('dir /s /b .\temps23210948.bat') do set file_nameis=%%i
 
@@ -156,12 +156,12 @@ del xxxxxxxxxx0931092.vbs
 del temps23210948.bat
 goto begin
 :disable
-if not defined selectedi echo.Please select an Interface&PAUSE&goto begin
-echo.running command...
-echo.netsh interface set interface %selectedi% disable
-echo.netsh interface set interface %selectedi% disable  >> temps23210948.bat
-echo.echo Errorlevel=%%errorlevel%%  >> temps23210948.bat
-echo.PAUSE >> temps23210948.bat
+if not defined selectedi echo:Please select an Interface&PAUSE&goto begin
+echo:running command...
+echo:netsh interface set interface %selectedi% disable
+echo:netsh interface set interface %selectedi% disable  >> temps23210948.bat
+echo:echo Errorlevel=%%errorlevel%%  >> temps23210948.bat
+echo:PAUSE >> temps23210948.bat
 if exist temps23210948.bat for /f "tokens=*" %%i in ('dir /s /b .\temps23210948.bat') do set file_nameis=%%i
 
 echo Set objShell = CreateObject("Shell.Application") >xxxxxxxxxx0931092.vbs
@@ -173,32 +173,36 @@ del xxxxxxxxxx0931092.vbs
 del temps23210948.bat
 goto begin
 :settings
-if not defined selectedi echo.Please select an Interface&PAUSE&goto begin
+if not defined selectedi echo:Please select an Interface&PAUSE&goto begin
 
 set ipis=
 set gateis=
 set subnetis=
+set dnsserveris=
 
 for /f "delims=" %%i in ('netsh interface ipv4 show addresses name^=%selectedi% ^| find "IP Address:" ') do set ipis=%%i
 for /f "delims=" %%i in ('netsh interface ipv4 show addresses name^=%selectedi% ^| find "Default Gateway:" ') do set gateis=%%i
 for /f "delims=" %%i in ('netsh interface ipv4 show addresses name^=%selectedi% ^| find "Subnet Prefix:" ') do set subnetis=%%i
+for /f "tokens=2 delims=:" %%i in ('netsh interface ipv4 show dnsservers name^=%selectedi% ^| find /i "dns servers"') do set dnsserveris=%%i
+
 
 for /f "tokens=*" %%i in ('netsh  interface ipv4 show addresses name^=%selectedi% ^| find "DHCP enabled:"') do for /f "tokens=3 delims=: " %%a in ("%%i") do set string=%%a
 
 
 
-if "%string%"=="No"   echo.    IP settings: Static
-if "%string%"=="Yes"  echo.    IP settings: DHCP
+if "%string%"=="No"   echo:    IP settings: Static
+if "%string%"=="Yes"  echo:    IP settings: DHCP
 if defined ipis echo %ipis%
 if defined gateis echo %gateis%
 if defined subnetis echo %subnetis%
+if defined dnsserveris echo:    DNS:                                %dnsserveris%
 goto begin
 :dhcp
-if not defined selectedi echo.Please select an Interface&PAUSE&goto begin
-echo @echo off^&title Running Command..^& cls ^& echo.netsh interface ipv4 set address name=%selectedi% source=dhcp  > temps23210948.bat
-echo.netsh -c interface ipv4 set address name=%selectedi% source=dhcp  >> temps23210948.bat
-echo.echo Errorlevel=%%errorlevel%%  >> temps23210948.bat
-echo.PAUSE >> temps23210948.bat
+if not defined selectedi echo:Please select an Interface&PAUSE&goto begin
+echo @echo off^&title Running Command..^& cls ^& echo:netsh interface ipv4 set address name=%selectedi% source=dhcp  > temps23210948.bat
+echo:netsh -c interface ipv4 set address name=%selectedi% source=dhcp  >> temps23210948.bat
+echo:echo Errorlevel=%%errorlevel%%  >> temps23210948.bat
+echo:PAUSE >> temps23210948.bat
 if exist temps23210948.bat for /f "tokens=*" %%i in ('dir /s /b .\temps23210948.bat') do set file_nameis=%%i
 
 echo Set objShell = CreateObject("Shell.Application") >xxxxxxxxxx0931092.vbs
@@ -210,31 +214,38 @@ del xxxxxxxxxx0931092.vbs
 del temps23210948.bat
 goto begin
 :static
-if defined selectedi echo.Interface: %selectedi%
-if not defined selectedi echo.No interface is selected!&goto begin
+if defined selectedi echo:Interface: %selectedi%
+if not defined selectedi echo:No interface is selected!&goto begin
 :no_good
 if defined ipis for /f "tokens=3" %%i in ("%ipis%") do echo|set/p=%%i|clip
-if defined ipis echo.IP Copied! You can use Paste
+if defined ipis echo:IP Copied! You can use Paste
 set /p ip=Enter IP ****
-echo %ip%| findstr /r "^[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*$"&&echo.Got it! || echo.no_good&&goto no_good
+echo %ip%| findstr /r "^[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*$"&&echo:Got it! || echo:no_good&&goto no_good
 :no_t
 if defined gateis for /f "tokens=3" %%i in ("%gateis%") do echo|set/p=%%i|clip
-if defined gateis echo.Gateway Copied! You can use Paste
+if defined gateis echo:Gateway Copied! You can use Paste
 set /p gate=Enter gate IP address **
-echo %gate%| findstr /r "^[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*$"&&echo.Got it! || echo.no_good&&goto no_t
+echo %gate%| findstr /r "^[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*$"&&echo:Got it! || echo:no_good&&goto no_t
 :not_really
 if defined subnetis for /f "tokens=5 delims=() " %%i in ("%subnetis%") do echo|set/p=%%i|clip
-if defined subnetis echo.Subnet Copied! You can use Paste
+if defined subnetis echo:Subnet Copied! You can use Paste
 set /p subnet=Enter subnet ***
-echo %subnet%| findstr /r "^[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*$"&&echo.Got it! || echo.no_good&&goto not_really
+echo %subnet%| findstr /r "^[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*$"&&echo:Got it! || echo:no_good&&goto not_really
+:really_good
+if defined dnsserveris for /f "tokens=1 delims= " %%i in ("%dnsserveris%") do echo|set/p=%%i|clip
+if defined dnsserveris echo:DNS Server Copied! You can use Paste
+set /p dns=Enter DNS ***
+echo %dns%| findstr /r "^[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*$"&&echo:Got it! || echo:no_good&&goto really_good
 :doit
-echo.Done!
-echo.Setting in motion..&timeout 1 >NUL&echo|set /p=Running as Administrative priveleges...
+echo:Done!
+echo:Setting in motion..&timeout 1 >NUL&echo|set /p=Running as Administrative priveleges...
 
-echo mode 80,7 ^&color %colors%^&echo off^&title Running Command..^& cls ^& echo.netsh interface ipv4 set address name=%selectedi% static %ip% %subnet% %gate% > temps23210948.bat
-echo.netsh -c interface ipv4 set address name=%selectedi% static %ip% %subnet% %gate%  >> temps23210948.bat
-echo.echo Errorlevel=%errorlevel% >> temps23210948.bat
-echo.PAUSE >> temps23210948.bat
+echo mode 80,7 ^&color %colors%^&echo off^&title Running Command..^& cls ^& echo:netsh interface ipv4 set address name=%selectedi% static %ip% %subnet% %gate% > temps23210948.bat
+echo:netsh -c interface ipv4 set address name=%selectedi% static %ip% %subnet% %gate%  >> temps23210948.bat
+echo:echo Errorlevel=%errorlevel% >> temps23210948.bat
+echo:netsh interface ipv4 set dns name=%selectedi% static %dns% primary >> temps23210948.bat
+echo:echo Errorlevel=%errorlevel% >> temps23210948.bat
+echo:PAUSE >> temps23210948.bat
 
 if exist temps23210948.bat for /f "tokens=*" %%i in ('dir /s /b .\temps23210948.bat') do set file_nameis=%%i
 
