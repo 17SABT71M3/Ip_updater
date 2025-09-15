@@ -203,6 +203,8 @@ if not defined selectedi echo:Please select an Interface&PAUSE&goto begin
 echo @echo off^&title Running Command..^& cls ^& echo:netsh interface ipv4 set address name=%selectedi% source=dhcp  > temps23210948.bat
 echo:netsh -c interface ipv4 set address name=%selectedi% source=dhcp  >> temps23210948.bat
 echo:echo Errorlevel=%%errorlevel%%  >> temps23210948.bat
+echo:netsh interface ipv4 set dns name=%selectedi% source=dhcp >> temps23210948.bat
+echo echo Errorlevel=%%errorlevel%%  >> temps23210948.bat
 echo:PAUSE >> temps23210948.bat
 if exist temps23210948.bat for /f "tokens=*" %%i in ('dir /s /b .\temps23210948.bat') do set file_nameis=%%i
 
