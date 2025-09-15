@@ -192,10 +192,11 @@ for /f "tokens=*" %%i in ('netsh  interface ipv4 show addresses name^=%selectedi
 
 if "%string%"=="No"   echo:    IP settings: Static
 if "%string%"=="Yes"  echo:    IP settings: DHCP
-if defined ipis echo %ipis%
-if defined gateis echo %gateis%
+if defined ipis (echo %ipis%) else (echo No existing Ip found)
+if defined gateis (echo %gateis%) else (echo No existing gateway found)
 if defined subnetis echo %subnetis%
-if defined dnsserveris echo:    DNS:                                %dnsserveris%
+if not defined subnetis (echo No subnet found)
+if defined dnsserveris echo:    DNS:                              %dnsserveris%
 goto begin
 :dhcp
 if not defined selectedi echo:Please select an Interface&PAUSE&goto begin
